@@ -1,0 +1,76 @@
+<configuration>
+    <!-- Enable ResourceManager HA -->
+    <property>
+        <name>yarn.resourcemanager.ha.enabled</name>
+        <value>true</value>
+    </property>
+	
+	<property>
+	    <name>yarn.resourcemanager.cluster-id</name>
+	    <value>bdss_cluster</value>
+	</property>
+
+    <!-- Define the two ResourceManagers -->
+    <property>
+        <name>yarn.resourcemanager.ha.rm-ids</name>
+        <value>rm1,rm2</value>
+    </property>
+
+    <!-- ResourceManager addresses -->
+    <property>
+        <name>yarn.resourcemanager.hostname.rm1</name>
+        <value>master1</value>
+    </property>
+
+    <property>
+        <name>yarn.resourcemanager.hostname.rm2</name>
+        <value>master2</value>
+    </property>
+	
+	<!-- Web UI for ResourceManagers -->
+    <property>
+        <name>yarn.resourcemanager.webapp.address.rm1</name>
+        <value>master1:8088</value>
+    </property>
+
+    <property>
+        <name>yarn.resourcemanager.webapp.address.rm2</name>
+        <value>master2:8088</value>
+    </property>
+
+    <!-- Automatic failover using ZooKeeper -->
+    <property>
+        <name>yarn.resourcemanager.zk-address</name>
+        <value>zookeeper:2181</value>
+    </property>
+	
+	<property>
+	  <name>yarn.nodemanager.aux-services</name>
+	  <value>mapreduce_shuffle</value>
+	</property>
+
+	<property>
+	  <name>yarn.nodemanager.aux-services.mapreduce.shuffle.class</name>
+	  <value>org.apache.hadoop.mapred.ShuffleHandler</value>
+	</property>
+	
+	<property>
+      <name>yarn.nodemanager.env-whitelist</name>
+      <value>JAVA_HOME,HADOOP_COMMON_HOME,HADOOP_HDFS_HOME,HADOOP_CONF_DIR,CLASSPATH_PREPEND_DISTCACHE,HADOOP_YARN_HOME,HADOOP_HOME,PATH,LANG,TZ,HADOOP_MAPRED_HOME</value>
+    </property>
+	
+	<property>
+	  <name>yarn.application.classpath</name>
+	  <value>
+	    $HADOOP_CONF_DIR,
+        $HADOOP_COMMON_HOME/share/hadoop/common/*,
+        $HADOOP_COMMON_HOME/share/hadoop/common/lib/*,
+        $HADOOP_HDFS_HOME/share/hadoop/hdfs/*,
+        $HADOOP_HDFS_HOME/share/hadoop/hdfs/lib/*,
+        $HADOOP_YARN_HOME/share/hadoop/yarn/*,
+        $HADOOP_YARN_HOME/share/hadoop/yarn/lib/*,
+        $HADOOP_MAPRED_HOME/share/hadoop/mapreduce/*,
+        $HADOOP_MAPRED_HOME/share/hadoop/mapreduce/lib/*
+	  </value>
+	</property>
+</configuration>

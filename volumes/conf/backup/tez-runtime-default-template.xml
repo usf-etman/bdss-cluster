@@ -1,0 +1,404 @@
+<?xml version="1.0"?>
+<!--
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License. See accompanying LICENSE file.
+-->
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+
+<!-- WARNING: THIS IS A GENERATED TEMPLATE PURELY FOR DOCUMENTATION PURPOSES
+ AND SHOULD NOT BE USED AS A CONFIGURATION FILE FOR TEZ -->
+
+<configuration>
+
+  <property>
+    <name>tez.runtime.cleanup.files.on.interrupt</name>
+    <defaultValue>false</defaultValue>
+    <type>boolean</type>
+    <unstable>true</unstable>
+    <private>true</private>
+  </property>
+
+  <property>
+    <name>tez.runtime.combiner.class</name>
+    <type>string</type>
+  </property>
+
+  <property>
+    <name>tez.runtime.combine.min.spills</name>
+    <defaultValue>3</defaultValue>
+    <type>integer</type>
+  </property>
+
+  <property>
+    <name>tez.runtime.compress</name>
+    <type>boolean</type>
+  </property>
+
+  <property>
+    <name>tez.runtime.compress.codec</name>
+    <type>string</type>
+  </property>
+
+  <property>
+    <name>tez.runtime.convert.user-payload.to.history-text</name>
+    <defaultValue>false</defaultValue>
+    <type>string</type>
+  </property>
+
+  <property>
+    <name>tez.runtime.empty.partitions.info-via-events.enabled</name>
+    <defaultValue>true</defaultValue>
+    <type>boolean</type>
+  </property>
+
+  <property>
+    <name>tez.runtime.enable.final-merge.in.output</name>
+    <defaultValue>true</defaultValue>
+    <type>boolean</type>
+  </property>
+
+  <property>
+    <name>tez.runtime.group.comparator.class</name>
+    <type>string</type>
+  </property>
+
+  <property>
+    <name>tez.runtime.ifile.readahead</name>
+    <defaultValue>true</defaultValue>
+    <type>boolean</type>
+  </property>
+
+  <property>
+    <name>tez.runtime.ifile.readahead.bytes</name>
+    <defaultValue>4194304</defaultValue>
+    <type>integer</type>
+  </property>
+
+  <property>
+    <name>tez.runtime.index.cache.memory.limit.bytes</name>
+    <defaultValue>1048576</defaultValue>
+    <type>integer</type>
+  </property>
+
+  <property>
+    <name>tez.runtime.task.input.post-merge.buffer.percent</name>
+    <type>float</type>
+  </property>
+
+  <property>
+    <name>tez.runtime.internal.sorter.class</name>
+    <type>string</type>
+  </property>
+
+  <property>
+    <name>tez.runtime.io.sort.factor</name>
+    <defaultValue>100</defaultValue>
+    <type>integer</type>
+  </property>
+
+  <property>
+    <name>tez.runtime.io.sort.mb</name>
+    <defaultValue>100</defaultValue>
+    <type>integer</type>
+  </property>
+
+  <property>
+    <name>tez.runtime.key.class</name>
+    <type>string</type>
+  </property>
+
+  <property>
+    <name>tez.runtime.key.comparator.class</name>
+    <type>string</type>
+  </property>
+
+  <property>
+    <name>tez.runtime.key.secondary.comparator.class</name>
+    <type>string</type>
+  </property>
+
+  <property>
+    <name>tez.runtime.optimize.local.fetch</name>
+    <defaultValue>true</defaultValue>
+    <type>boolean</type>
+  </property>
+
+  <property>
+    <name>tez.runtime.optimize.shared.fetch</name>
+    <defaultValue>false</defaultValue>
+    <type>boolean</type>
+  </property>
+
+  <property>
+    <name>tez.runtime.partitioner.class</name>
+    <type>string</type>
+  </property>
+
+  <property>
+    <name>tez.runtime.pipelined-shuffle.enabled</name>
+    <defaultValue>false</defaultValue>
+    <type>boolean</type>
+  </property>
+
+  <property>
+    <name>tez.runtime.pipelined.sorter.lazy-allocate.memory</name>
+    <defaultValue>false</defaultValue>
+    <type>boolean</type>
+  </property>
+
+  <property>
+    <name>tez.runtime.pipelined.sorter.min-block.size.in.mb</name>
+    <defaultValue>2000</defaultValue>
+    <type>integer</type>
+  </property>
+
+  <property>
+    <name>tez.runtime.pipelined.sorter.sort.threads</name>
+    <defaultValue>2</defaultValue>
+    <type>integer</type>
+  </property>
+
+  <property>
+    <name>tez.runtime.merge.progress.records</name>
+    <type>integer</type>
+    <unstable>true</unstable>
+    <private>true</private>
+  </property>
+
+  <property>
+    <name>tez.runtime.report.partition.stats</name>
+    <type>string</type>
+  </property>
+
+  <property>
+    <name>tez.runtime.shuffle.acceptable.host-fetch.failure.fraction</name>
+    <defaultValue>0.2</defaultValue>
+    <type>float</type>
+    <unstable>true</unstable>
+    <private>true</private>
+  </property>
+
+  <property>
+    <name>tez.runtime.shuffle.batch.wait</name>
+    <defaultValue>-1</defaultValue>
+    <type>integer</type>
+  </property>
+
+  <property>
+    <name>tez.runtime.shuffle.buffersize</name>
+    <defaultValue>8192</defaultValue>
+    <type>integer</type>
+  </property>
+
+  <property>
+    <name>tez.runtime.shuffle.connect.timeout</name>
+    <type>integer</type>
+  </property>
+
+  <property>
+    <name>tez.runtime.shuffle.memory-to-memory.enable</name>
+    <defaultValue>false</defaultValue>
+    <type>boolean</type>
+  </property>
+
+  <property>
+    <name>tez.runtime.shuffle.ssl.enable</name>
+    <defaultValue>false</defaultValue>
+    <type>boolean</type>
+  </property>
+
+  <property>
+    <name>tez.runtime.shuffle.failed.check.since-last.completion</name>
+    <defaultValue>true</defaultValue>
+    <type>boolean</type>
+    <unstable>true</unstable>
+    <private>true</private>
+  </property>
+
+  <property>
+    <name>tez.runtime.shuffle.fetcher.use-shared-pool</name>
+    <defaultValue>false</defaultValue>
+    <type>boolean</type>
+    <unstable>true</unstable>
+    <private>true</private>
+  </property>
+
+  <property>
+    <name>tez.runtime.shuffle.fetch.buffer.percent</name>
+    <defaultValue>0.9</defaultValue>
+    <type>float</type>
+  </property>
+
+  <property>
+    <name>tez.runtime.shuffle.fetch.testing.errors.enable</name>
+    <defaultValue>false</defaultValue>
+    <type>boolean</type>
+  </property>
+
+  <property>
+    <name>tez.runtime.shuffle.fetch.failures.limit</name>
+    <defaultValue>5</defaultValue>
+    <type>integer</type>
+  </property>
+
+  <property>
+    <name>tez.runtime.shuffle.fetch.max.task.output.at.once</name>
+    <defaultValue>20</defaultValue>
+    <type>integer</type>
+  </property>
+
+  <property>
+    <name>tez.runtime.shuffle.fetch.testing.errors.config</name>
+    <defaultValue>*#50</defaultValue>
+    <type>string</type>
+  </property>
+
+  <property>
+    <name>tez.runtime.shuffle.fetch.verify-disk-checksum</name>
+    <defaultValue>true</defaultValue>
+    <type>boolean</type>
+  </property>
+
+  <property>
+    <name>tez.runtime.shuffle.host.penalty.time.limit</name>
+    <defaultValue>600000</defaultValue>
+    <type>integer</type>
+  </property>
+
+  <property>
+    <name>tez.runtime.shuffle.keep-alive.enabled</name>
+    <defaultValue>false</defaultValue>
+    <type>boolean</type>
+  </property>
+
+  <property>
+    <name>tez.runtime.shuffle.keep-alive.max.connections</name>
+    <defaultValue>20</defaultValue>
+    <type>integer</type>
+  </property>
+
+  <property>
+    <name>tez.runtime.shuffle.max.allowed.failed.fetch.fraction</name>
+    <defaultValue>0.5</defaultValue>
+    <type>float</type>
+    <unstable>true</unstable>
+    <private>true</private>
+  </property>
+
+  <property>
+    <name>tez.runtime.shuffle.max.stall.time.fraction</name>
+    <defaultValue>0.5</defaultValue>
+    <type>float</type>
+    <unstable>true</unstable>
+    <private>true</private>
+  </property>
+
+  <property>
+    <name>tez.runtime.shuffle.memory.limit.percent</name>
+    <defaultValue>0.25</defaultValue>
+    <type>float</type>
+  </property>
+
+  <property>
+    <name>tez.runtime.shuffle.memory-to-memory.segments</name>
+    <type>integer</type>
+  </property>
+
+  <property>
+    <name>tez.runtime.shuffle.merge.percent</name>
+    <defaultValue>0.9</defaultValue>
+    <type>float</type>
+  </property>
+
+  <property>
+    <name>tez.runtime.shuffle.min.failures.per.host</name>
+    <defaultValue>4</defaultValue>
+    <type>integer</type>
+    <unstable>true</unstable>
+    <private>true</private>
+  </property>
+
+  <property>
+    <name>tez.runtime.shuffle.min.required.progress.fraction</name>
+    <defaultValue>0.5</defaultValue>
+    <type>float</type>
+    <unstable>true</unstable>
+    <private>true</private>
+  </property>
+
+  <property>
+    <name>tez.runtime.shuffle.notify.readerror</name>
+    <defaultValue>true</defaultValue>
+    <type>boolean</type>
+  </property>
+
+  <property>
+    <name>tez.runtime.shuffle.parallel.copies</name>
+    <defaultValue>20</defaultValue>
+    <type>integer</type>
+  </property>
+
+  <property>
+    <name>tez.runtime.shuffle.read.timeout</name>
+    <defaultValue>180000</defaultValue>
+    <type>integer</type>
+  </property>
+
+  <property>
+    <name>tez.runtime.shuffle.src-attempt.abort.limit</name>
+    <defaultValue>-1</defaultValue>
+    <type>integer</type>
+    <unstable>true</unstable>
+    <private>true</private>
+  </property>
+
+  <property>
+    <name>tez.runtime.shuffle.use.async.http</name>
+    <defaultValue>false</defaultValue>
+    <type>boolean</type>
+  </property>
+
+  <property>
+    <name>tez.runtime.sorter.class</name>
+    <type>string</type>
+  </property>
+
+  <property>
+    <name>tez.runtime.sort.spill.percent</name>
+    <defaultValue>0.8</defaultValue>
+    <type>float</type>
+  </property>
+
+  <property>
+    <name>tez.runtime.unordered.output.buffer.size-mb</name>
+    <defaultValue>100</defaultValue>
+    <type>integer</type>
+  </property>
+
+  <property>
+    <name>tez.runtime.unordered.output.max-per-buffer.size-bytes</name>
+    <type>integer</type>
+    <private>true</private>
+  </property>
+
+  <property>
+    <name>tez.runtime.unordered-partitioned-kvwriter.buffer-merge-percent</name>
+    <defaultValue>0</defaultValue>
+    <type>int</type>
+  </property>
+
+  <property>
+    <name>tez.runtime.value.class</name>
+    <type>string</type>
+  </property>
+
+</configuration>

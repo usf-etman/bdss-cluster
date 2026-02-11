@@ -1,0 +1,237 @@
+version: '3.8'
+services:
+  zk:
+    image: zookeeper:3.8.4
+    container_name: zk
+    hostname: zookeeper
+    ports:
+      - "2181:2181"
+    networks:
+      - bd_ss_nw
+    healthcheck:
+      test: ["CMD-SHELL", "echo ruok | nc localhost 2181 | grep -q imok"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    env_file:
+      - ./env_files/zk.env
+    
+  journalnode1:
+    image: ysfetman/bdss-hadoop-base:3.4.2
+    container_name: journalnode1
+    hostname: journalnode1
+    ports:
+      - "18480:8480"
+    volumes:
+      - ./volumes/jn1:/opt/hadoop/dfs/journal
+      - ./volumes/conf:/conf
+    networks:
+      - bd_ss_nw
+    command: 
+      ["/scripts/jn.sh"]
+    env_file:
+      - ./env_files/hadoop.env
+      
+  journalnode2:
+    image: ysfetman/bdss-hadoop-base:3.4.2
+    container_name: journalnode2
+    hostname: journalnode2
+    ports:
+      - "28480:8480"
+    volumes:
+      - ./volumes/conf:/conf
+    networks:
+      - bd_ss_nw
+    command: 
+      ["/scripts/jn.sh"]
+    env_file:
+      - ./env_files/hadoop.env
+      
+  journalnode3:
+    image: ysfetman/bdss-hadoop-base:3.4.2
+    container_name: journalnode3
+    hostname: journalnode3
+    ports:
+      - "38480:8480"
+    volumes:
+      - ./volumes/conf:/conf
+    networks:
+      - bd_ss_nw
+    command: 
+      ["/scripts/jn.sh"]
+    env_file:
+      - ./env_files/hadoop.env
+    healthcheck:
+      test: ["CMD-SHELL", "nc -z localhost 8485"]
+      interval: 5s
+      timeout: 3s
+      retries: 30
+      
+  master1:
+    image: ysfetman/bdss-hadoop-base:3.4.2
+    container_name: master1
+    hostname: master1
+    ports:
+      - "19870:9870"
+      - "18088:8088"
+    volumes:
+      - ./volumes/conf:/conf
+      - ./volumes/master1/namenode:/opt/hadoop/dfs/name
+    networks:
+      - bd_ss_nw
+    command: 
+      ["/scripts/active_nn.sh"]
+    env_file:
+      - ./env_files/hadoop.env
+    depends_on:
+      zk:
+        condition: service_healthy
+      journalnode3:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "test -f /opt/hadoop/dfs/.formatted"]
+      interval: 5s
+      timeout: 2s
+      retries: 60
+        
+  master2:
+    image: ysfetman/bdss-hadoop-base:3.4.2
+    container_name: master2
+    hostname: master2
+    ports:
+      - "29870:9870"
+      - "28088:8088"
+    volumes:
+      - ./volumes/conf:/conf
+      - ./volumes/master2/namenode:/opt/hadoop/dfs/name
+    networks:
+      - bd_ss_nw
+    command: 
+      ["/scripts/standby_nn.sh"]
+    env_file:
+      - ./env_files/hadoop.env
+    depends_on:
+      master1:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "test -f /opt/hadoop/dfs/.bootstrapped"]
+      interval: 5s
+      timeout: 2s
+      retries: 60
+        
+  worker1:
+    image: ysfetman/bdss-hadoop-spark:4.1.1
+    container_name: worker1
+    hostname: worker1
+    volumes:
+      - ./volumes/conf:/conf
+      - ./volumes/data:/data
+    networks:
+      - bd_ss_nw
+    command: 
+      ["/scripts/worker.sh"]
+    env_file:
+      - ./env_files/spark.env
+    depends_on:
+      master2:
+        condition: service_healthy
+        
+  worker2:
+    image: ysfetman/bdss-hadoop-spark:4.1.1
+    container_name: worker2
+    hostname: worker2
+    volumes:
+      - ./volumes/conf:/conf
+      - ./volumes/data:/data
+    networks:
+      - bd_ss_nw
+    command: 
+      ["/scripts/worker.sh"]
+    env_file:
+      - ./env_files/spark.env
+    depends_on:
+      master2:
+        condition: service_healthy
+        
+  worker3:
+    image: ysfetman/bdss-hadoop-spark:4.1.1
+    container_name: worker3
+    hostname: worker3
+    volumes:
+      - ./volumes/conf:/conf
+      - ./volumes/data:/data
+    networks:
+      - bd_ss_nw
+    command: 
+      ["/scripts/worker.sh"]
+    env_file:
+      - ./env_files/spark.env
+    depends_on:
+      master2:
+        condition: service_healthy
+        
+  worker4:
+    image: ysfetman/bdss-hadoop-spark:4.1.1
+    container_name: worker4
+    hostname: worker4
+    ports:
+      - "18080:18080"
+    volumes:
+      - ./volumes/conf:/conf
+      - ./volumes/data:/data
+    networks:
+      - bd_ss_nw
+    command: 
+      ["/scripts/worker.sh"]
+    env_file:
+      - ./env_files/spark.env
+    healthcheck:
+      test: ["CMD-SHELL", "pgrep -f 'DataNode' > /dev/null"]
+      interval: 10s
+      timeout: 5s
+      retries: 6
+    depends_on:
+      master2:
+        condition: service_healthy
+
+  metastore-db:
+    image: postgres:15
+    container_name: metastore-db
+    hostname: metastore-db
+    ports:
+      - "6432:5432"
+    networks:
+      - bd_ss_nw
+    environment:
+      POSTGRES_DB: metastore
+      POSTGRES_USER: hive
+      POSTGRES_PASSWORD: hive
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U hive -d metastore -h localhost"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+      start_period: 10s
+  
+  hive:
+    image: ysfetman/bdss-hadoop-hive:4.1.0
+    container_name: hive
+    hostname: hive
+    volumes:
+      - ./volumes/conf:/conf
+    ports:
+      - "10002:10002"
+    networks:
+      - bd_ss_nw
+    command: 
+      ["/scripts/hive.sh"]
+    env_file:
+      - ./env_files/hive.env
+    depends_on:
+      worker4:
+        condition: service_healthy
+      metastore-db:
+        condition: service_healthy
+      
+networks:
+  bd_ss_nw:
