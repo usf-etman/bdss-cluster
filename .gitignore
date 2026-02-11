@@ -1,3 +1,4 @@
 build/
 note.txt
 volumes/data/weather_dataset/*
+!volumes/data/weather_dataset/.gitkeep
