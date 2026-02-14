@@ -1,7 +1,7 @@
 package mr.example;
 
 import org.apache.hadoop.fs.Path;
-import org.apache.hadoop.io.IntWritable;
+import org.apache.hadoop.io.DoubleWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
@@ -12,69 +12,70 @@ import org.apache.hadoop.mapreduce.Mapper;
 import org.apache.hadoop.mapreduce.Reducer;
 import org.apache.hadoop.mapreduce.Partitioner;
 
-class MaxTemperatureMapperCombinerPartitionerReducer {
+public class MaxTemperatureMapperCombinerPartitionerReducer {
 	public static void main(String[] args) throws Exception {
 		if (args.length != 2) {
 			System.err.println("Usage: MaxTemperatureMapperCombinerPartitionerReducer <input path> <output path>");
 			System.exit(-1);
 		}
 
+		// Job configuration
 		Job job = new Job();
 		job.setJarByClass(MaxTemperatureMapperCombinerPartitionerReducer.class);
 		job.setJobName("Max temperature");
-		job.setNumReduceTasks(10);
+		job.setNumReduceTasks(2);
+		job.setMapperClass(TemperatureMapper6.class);
+		job.setCombinerClass(TemperatureReducer6.class);
+		job.setPartitionerClass(TemperaturePartitioner2.class);
+		job.setReducerClass(TemperatureReducer6.class);
+		job.setOutputKeyClass(Text.class);
+		job.setOutputValueClass(DoubleWritable.class);
 
+		// Input & Output
 		FileInputFormat.addInputPath(job, new Path(args[0]));
 		FileOutputFormat.setOutputPath(job, new Path(args[1]));
 
-		job.setMapperClass(TemperatureMapper5.class);
-		job.setCombinerClass(TemperatureReducer5.class);
-		job.setPartitionerClass(TemperaturePartitioner2.class);
-		job.setReducerClass(TemperatureReducer5.class);
-
-		job.setOutputKeyClass(Text.class);
-		job.setOutputValueClass(IntWritable.class);
-		
+		// Run Job
 		System.exit(job.waitForCompletion(true) ? 0 : 1);
 	}
 }
 
-class TemperatureMapper5 extends Mapper<LongWritable, Text, Text, IntWritable> {
-	private static final int MISSING = 9999;
-
+class TemperatureMapper6 extends Mapper<LongWritable, Text, Text, DoubleWritable> {
 	@Override
 	public void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException {
+		// get value
 		String line = value.toString();
-		String year = line.substring(15, 19);
-		int airTemperature;
-		if (line.charAt(87) == '+') { // parseInt doesn't like leading plus signs
-			airTemperature = Integer.parseInt(line.substring(88, 92));
-		} else {
-			airTemperature = Integer.parseInt(line.substring(87, 92));
-		}
-		String quality = line.substring(92, 93);
-		if (airTemperature != MISSING && quality.matches("[01459]")) {
-		        System.out.println("Key: " + year + ", Value: " + airTemperature);
-			context.write(new Text(year), new IntWritable(airTemperature));
+
+		// Ignore headers
+		if (line.startsWith("STATION")) { return; }
+		
+		// Parse fields
+		String[] fields = line.split("\\|");
+		String year = fields[2].substring(0, 4);
+		double temperature = Double.parseDouble(fields[6]);
+		int qualityCode = Integer.parseInt(fields[8]);
+
+		// output record if valid quality code
+		if (qualityCode == 0 || qualityCode == 1) {
+			context.write(new Text(year), new DoubleWritable(temperature));
 		}
 	}
 }
 
-class TemperaturePartitioner2<K2, V2> extends Partitioner<Text, IntWritable> {
+class TemperaturePartitioner2<K2, V2> extends Partitioner<Text, DoubleWritable> {
 
-	public int getPartition(Text key, IntWritable value, int numReduceTasks) {
+	public int getPartition(Text key, DoubleWritable value, int numReduceTasks) {
         return (int) (Integer.parseInt(key.toString()) - 1901);
     }
 }
 
-class TemperatureReducer5 extends Reducer<Text, IntWritable, Text, IntWritable> {
-
+class TemperatureReducer6 extends Reducer<Text, DoubleWritable, Text, DoubleWritable> {
 	@Override
-	public void reduce(Text key, Iterable<IntWritable> values, Context context) throws IOException, InterruptedException {
-		int maxValue = Integer.MIN_VALUE;
-		for (IntWritable value : values) {
+	public void reduce(Text key, Iterable<DoubleWritable> values, Context context) throws IOException, InterruptedException {
+		double maxValue = Double.MIN_VALUE;
+		for (DoubleWritable value : values) {
 			maxValue = Math.max(maxValue, value.get());
 		}
-		context.write(key, new IntWritable(maxValue));
+		context.write(key, new DoubleWritable(maxValue));
 	}
 }

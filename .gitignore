@@ -2,3 +2,5 @@ build/
 note.txt
 volumes/data/weather_dataset/*
 !volumes/data/weather_dataset/.gitkeep
+volumes/data/MR/mr_count/
+volumes/data/MR/mr_max_temperature/src/main/java/mr/example/Bonus*
