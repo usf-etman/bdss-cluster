@@ -19,7 +19,7 @@ This repo represents a Dockerized Big data cluster that I built for training/tea
 The below photo shows the cluster containers and how they interact with each other.
 - Each circle is a container and you can see what services are run on each.
 - Note: TEZ, SPARK, ICEBERG & COMET are binaries not services.
-<img width="745" height="877" alt="Our labs environment" src="https://github.com/user-attachments/assets/36d08904-6d9d-4e42-b2aa-00738aff740a" />
+<img width="745" height="878" alt="Our labs environment" src="https://github.com/user-attachments/assets/23af4dec-438e-4a2a-a358-4f7ddcddd692" />
 
 ### Stack versions
 | Component   | Version |
